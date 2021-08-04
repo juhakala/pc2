@@ -1,0 +1,64 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:projectWpf.Sources.pages.menu"
+      xmlns:streamMem="clr-namespace:projectWpf.Sources.pages.streamMem" x:Class="projectWpf.Sources.pages.menu.MenuView"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="200"
+      Title="MenuView">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="200" />
+		</Grid.RowDefinitions>
+		<StackPanel Grid.Row="0">
+			<!--<Button Click="{Binding SetupAndStartStreamRead}" Content="SetUp and Read"/>-->
+			<Button Command="{Binding AddValueToLog}">addValue</Button>
+
+		</StackPanel>
+		<DataGrid Grid.Row="1"
+			ItemsSource="{Binding LogEvents}"
+			AutoGenerateColumns="False"
+			HeadersVisibility="Column"
+			BorderThickness="0,0,0,0"
+			GridLinesVisibility="None"
+			>
+			<DataGrid.Columns>
+				<DataGridTextColumn Binding="{Binding Time}" Header="Time" Width="auto">
+					<DataGridTextColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="BorderThickness" Value="1,1,0,1" />
+							<Setter Property="BorderBrush" Value="Black" />
+						</Style>
+					</DataGridTextColumn.HeaderStyle>
+				</DataGridTextColumn>
+				<DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*">
+					<DataGridTextColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="BorderThickness" Value="1,1,0,1" />
+							<Setter Property="BorderBrush" Value="Black" />
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Column.Header}" Value="Name">
+									<Setter Property="BorderThickness" Value="1,1,1,1" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</DataGridTextColumn.HeaderStyle>
+				</DataGridTextColumn>
+			</DataGrid.Columns>
+			<DataGrid.CellStyle>
+				<Style TargetType="DataGridCell">
+					<Setter Property="BorderThickness" Value="1,0,0,1" />
+					<Setter Property="BorderBrush" Value="Black" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Column.Header}" Value="Name">
+							<Setter Property="BorderThickness" Value="1,0,1,1" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</DataGrid.CellStyle>
+		</DataGrid>
+	</Grid>
+</Page>
