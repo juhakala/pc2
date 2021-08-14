@@ -45,7 +45,9 @@
 			BorderBrush="Black"
             Background="{StaticResource basicBackground}"
             ItemsSource="{Binding Source={StaticResource mParticipantInfo}}"
-			ColumnHeaderStyle="{StaticResource basicDataGridColumnHeader}">
+			ColumnHeaderStyle="{StaticResource basicDataGridColumnHeader}"
+			SelectedItem="{Binding myReader.memBlock.selectedRow, Mode=OneWayToSource}"
+			>
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="  #  " Binding="{Binding mRacePosition}"/>
 				<DataGridTextColumn Header=" Name " Binding="{Binding mName}" />
@@ -56,12 +58,7 @@
 				<DataGridTextColumn Width="80" Header=" Sec2 " Binding="{Binding mCurrentSector2Time}" />
 				<DataGridTextColumn Width="80" Header=" Sec3 " Binding="{Binding mCurrentSector3Time}" />
 				<DataGridTextColumn Width="80" Header=" Speed " Binding="{Binding mSpeed}" />
-
 				<DataGridTextColumn Header=" Color " Binding="{Binding cColor}" />
-
-
-
-
 
 			</DataGrid.Columns>
 			<DataGrid.CellStyle>

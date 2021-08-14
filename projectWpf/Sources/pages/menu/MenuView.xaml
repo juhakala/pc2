@@ -22,6 +22,13 @@
 			<Setter Property="FontFamily" Value="Bahnschrift" />
 		</Style>
 
+		<Style x:Key="basicTextBox" TargetType="TextBox">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="FontFamily" Value="Bahnschrift" />
+			<Setter Property="Background" Value="#13161b" />
+		</Style>
+
 		<Style x:Key="basicButton" TargetType="Button">
 			<Setter Property="Foreground" Value="White" />
 			<Setter Property="FontSize" Value="14" />
@@ -88,7 +95,29 @@
 				<TextBlock Style="{StaticResource basicTextBlock}" Text="{Binding myReader.memBlock.mNumParticipants}" />
 			</StackPanel>
 		</StackPanel>
-		<Button Style="{StaticResource basicButton}" VerticalAlignment="Bottom" Command="{Binding DoSomethingCommand}" Content="Setup and Start Stream"/>
+		<StackPanel VerticalAlignment="Bottom" >
+			<StackPanel Orientation="Horizontal" Width="400">
+				<Button
+					Style="{StaticResource basicButton}"
+					Width="150"
+					Content="Add Teammate" />
+				<Border
+					BorderBrush="White"
+					BorderThickness="1,1,1,1">
+					<TextBlock
+						TextAlignment="Center"
+						VerticalAlignment="Center"
+						Style="{StaticResource basicTextBlock}"
+						Width="98"
+						Text="{Binding myReader.memBlock.selectedRow}" />
+				</Border>
+				<Button
+					Style="{StaticResource basicButton}"
+					Width="150"
+					Content="Change Driver" />
+			</StackPanel>
+			<Button Style="{StaticResource basicButton}" Command="{Binding DoSomethingCommand}" Content="Setup and Start Stream"/>
+		</StackPanel>
 		<DataGrid Grid.Row="1"
 			ItemsSource="{Binding LogEvents}"
 			AutoGenerateColumns="False"
