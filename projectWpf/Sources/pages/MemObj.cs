@@ -63,13 +63,13 @@ namespace projectWpf.Sources.pages
 		public bool mLapInvalidated { get { return _mLapInvalidated; } set { _mLapInvalidated = value; NotifyPropertyChanged("mLapInvalidated"); } }
 		public uint mRaceState { get { return _mRaceState; } set { _mRaceState = value; NotifyPropertyChanged("mRaceState"); } }
 		public uint mPitMode { get { return _mPitMode; } set { _mPitMode = value; NotifyPropertyChanged("mPitMode"); } }
-		public float mSpeed { get { return _mSpeed; } set { _mSpeed = value; NotifyPropertyChanged("_mSpeed"); } }
+		public float mSpeed { get { return _mSpeed; } set { _mSpeed = value; NotifyPropertyChanged("mSpeed"); } }
 
 
 
 
-
-
+		private string _cColor;
+		public string cColor { get { return _cColor; } set { _cColor = value; NotifyPropertyChanged("cColor"); } }
 		public ParticipantInfo(uint i)
 		{
 			mWorldPosition = new ObservableCollection<float>();
@@ -77,6 +77,7 @@ namespace projectWpf.Sources.pages
 			mWorldPosition.Add(0);
 			mWorldPosition.Add(0);
 			mRacePosition = i;
+			cColor = "Red";
 		}
 	}
 	class MemObj : BaseViewModel
@@ -102,16 +103,26 @@ namespace projectWpf.Sources.pages
 		public uint RaceState { get { return _RaceState; } set { _RaceState = value; NotifyPropertyChanged("RaceState"); } }
 
 		public int mViewedParticipantIndex { get { return _mViewedParticipantIndex; } set { _mViewedParticipantIndex = value; NotifyPropertyChanged("mViewedParticipantIndex"); } }
-		public int mNumParticipants { get { return _mNumParticipants; } set { _mNumParticipants = value; NotifyPropertyChanged("mNumParticipants"); } }
+		public int mNumParticipants
+		{
+			get { return _mNumParticipants; }
+			set
+			{
+				for (int i = mNumParticipants; value > i; i++)
+				{
+					App.Current.Dispatcher.Invoke((Action)delegate
+					{
+						mParticipantInfo.Add(new ParticipantInfo((uint)i + 1));
+					});
+				}
+				_mNumParticipants = value; NotifyPropertyChanged("mNumParticipants");
+			}
+		}
 		public ObservableCollection<ParticipantInfo> mParticipantInfo  { get { return _mParticipantInfo; } set { _mParticipantInfo = value; /*NotifyPropertyChanged("mParticipantInfo");*/  /*Debug.WriteLine($"patrinfo CHANGED");*/ } }
-		public MemObj(int nParticipants = 17)
+		public MemObj(int nParticipants = 0)
 		{
 			mParticipantInfo = new ObservableCollection<ParticipantInfo>();
 			mNumParticipants = nParticipants;
-			for (int i = 0; i < nParticipants; i++)
-			{
-				mParticipantInfo.Add(new ParticipantInfo((uint)i + 1));
-			}
 		}
 	}
 }

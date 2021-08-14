@@ -22,7 +22,8 @@ namespace projectWpf
 		public void setMenuPage(MainWindow MainW)
 		{
 			Page page = new MenuView();
-			page.DataContext = MenuViewModel;
+			//page.DataContext = MenuViewModel;
+			page.DataContext = StreamMemViewModel;
 			MainW.menu_frame.Navigate(page);
 		}
 		public void setStreamMemPage(MainWindow MainW)

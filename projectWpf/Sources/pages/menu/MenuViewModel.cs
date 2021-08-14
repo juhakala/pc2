@@ -13,21 +13,5 @@ namespace projectWpf.Sources.pages.menu
 		{
 			
 		}
-		//private ICommand _addValueToLog;
-		//public ICommand AddValueToLog
-		//{
-		//	get
-		//	{
-		//		if (_addValueToLog == null)
-		//		{
-		//			_addValueToLog = new RelayCommand(
-		//				p => true,
-		//				p => {
-		//					Log("test in menuVM");
-		//				});
-		//		}
-		//		return _addValueToLog;
-		//	}
-		//}
 	}
 }

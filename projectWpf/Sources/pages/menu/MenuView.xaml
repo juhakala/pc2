@@ -4,43 +4,118 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:projectWpf.Sources.pages.menu"
-      xmlns:streamMem="clr-namespace:projectWpf.Sources.pages.streamMem" x:Class="projectWpf.Sources.pages.menu.MenuView"
+      xmlns:streamMem="clr-namespace:projectWpf.Sources.pages.streamMem" xmlns:projectWpf="clr-namespace:projectWpf" x:Class="projectWpf.Sources.pages.menu.MenuView"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="200"
+      d:DesignHeight="400" d:DesignWidth="200"
       Title="MenuView">
-	<Grid>
+	<Page.Resources>
+
+		<Style x:Key="carDot" TargetType="Ellipse">
+			<Setter Property="Width" Value="10" />
+			<Setter Property="Height" Value="10" />
+			<Setter Property="Fill" Value="{Binding cColor}" />
+		</Style>
+
+		<Style x:Key="basicTextBlock" TargetType="TextBlock">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="FontFamily" Value="Bahnschrift" />
+		</Style>
+
+		<Style x:Key="basicButton" TargetType="Button">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="FontFamily" Value="Bahnschrift" />
+			<Setter Property="Height" Value="30" />
+			<Setter Property="BorderBrush" Value="White" />
+			<Setter Property="Background" Value="#13161b" />
+		</Style>
+
+	</Page.Resources>
+	<Grid Background="#13161b">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
-			<RowDefinition Height="200" />
+			<RowDefinition Height="35" />
 		</Grid.RowDefinitions>
 		<StackPanel Grid.Row="0">
-			<!--<Button Click="{Binding SetupAndStartStreamRead}" Content="SetUp and Read"/>-->
-			<Button Command="{Binding AddValueToLog}">addValue</Button>
-
+			<ItemsControl ItemsSource="{Binding myReader.memBlock.mParticipantInfo}">
+				<ItemsControl.Background>
+					<ImageBrush ImageSource="{Binding myReader.BGImage}"/>
+				</ItemsControl.Background>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<Canvas Width="400" Height="706" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemContainerStyle>
+					<Style TargetType="ContentPresenter">
+						<Setter Property="Canvas.Left" Value="{Binding mWorldPosition[0]}" />
+						<Setter Property="Canvas.Bottom" Value="{Binding mWorldPosition[2]}" />
+					</Style>
+				</ItemsControl.ItemContainerStyle>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Canvas>
+							<Ellipse>
+								<Ellipse.Style>
+									<Style TargetType="Ellipse" BasedOn="{StaticResource carDot}" />
+								</Ellipse.Style>
+							</Ellipse>
+						</Canvas>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
 		</StackPanel>
+		<StackPanel Margin="0,706,0,0">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="GameState: " />
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="{Binding myReader.memBlock.GameState}" />
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="SessionState: " />
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="{Binding myReader.memBlock.SessionState}" />
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="RaceState: " />
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="{Binding myReader.memBlock.RaceState}" />
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="mViewedParticipantIndex: " />
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="{Binding myReader.memBlock.mViewedParticipantIndex}" />
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="mNumParticipants: " />
+				<TextBlock Style="{StaticResource basicTextBlock}" Text="{Binding myReader.memBlock.mNumParticipants}" />
+			</StackPanel>
+		</StackPanel>
+		<Button Style="{StaticResource basicButton}" VerticalAlignment="Bottom" Command="{Binding DoSomethingCommand}" Content="Setup and Start Stream"/>
 		<DataGrid Grid.Row="1"
 			ItemsSource="{Binding LogEvents}"
 			AutoGenerateColumns="False"
 			HeadersVisibility="Column"
 			BorderThickness="0,0,0,0"
 			GridLinesVisibility="None"
+			Background="#13161b"
+			Foreground="White"
 			>
 			<DataGrid.Columns>
 				<DataGridTextColumn Binding="{Binding Time}" Header="Time" Width="auto">
 					<DataGridTextColumn.HeaderStyle>
-						<Style TargetType="DataGridColumnHeader">
+						<Style TargetType="{x:Type DataGridColumnHeader}">
 							<Setter Property="BorderThickness" Value="1,1,0,1" />
-							<Setter Property="BorderBrush" Value="Black" />
+							<Setter Property="BorderBrush" Value="White" />
+							<Setter Property="Background" Value="#13161b" />
 						</Style>
 					</DataGridTextColumn.HeaderStyle>
 				</DataGridTextColumn>
 				<DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*">
 					<DataGridTextColumn.HeaderStyle>
-						<Style TargetType="DataGridColumnHeader">
+						<Style TargetType="{x:Type DataGridColumnHeader}">
 							<Setter Property="BorderThickness" Value="1,1,0,1" />
-							<Setter Property="BorderBrush" Value="Black" />
+							<Setter Property="BorderBrush" Value="White" />
+							<Setter Property="Background" Value="#13161b" />
 							<Style.Triggers>
-								<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Column.Header}" Value="Name">
+								<DataTrigger Binding="{Binding Column.Header, RelativeSource={RelativeSource Self}}" Value="Name">
 									<Setter Property="BorderThickness" Value="1,1,1,1" />
 								</DataTrigger>
 							</Style.Triggers>
@@ -49,11 +124,12 @@
 				</DataGridTextColumn>
 			</DataGrid.Columns>
 			<DataGrid.CellStyle>
-				<Style TargetType="DataGridCell">
+				<Style TargetType="{x:Type DataGridCell}">
 					<Setter Property="BorderThickness" Value="1,0,0,1" />
-					<Setter Property="BorderBrush" Value="Black" />
+					<Setter Property="BorderBrush" Value="White" />
+					<Setter Property="Background" Value="#13161b" />
 					<Style.Triggers>
-						<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Column.Header}" Value="Name">
+						<DataTrigger Binding="{Binding Column.Header, RelativeSource={RelativeSource Self}}" Value="Name">
 							<Setter Property="BorderThickness" Value="1,0,1,1" />
 						</DataTrigger>
 					</Style.Triggers>
@@ -62,3 +138,35 @@
 		</DataGrid>
 	</Grid>
 </Page>
+
+
+<!--<StackPanel Grid.Row="0">
+	<ItemsControl ItemsSource="{Binding myReader.memBlock.mParticipantInfo}">
+		<ItemsControl.Background>
+			<ImageBrush ImageSource="{Binding myReader.BGImage}"/>
+		</ItemsControl.Background>
+		<ItemsControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<Canvas Width="400" Height="706" />
+			</ItemsPanelTemplate>
+		</ItemsControl.ItemsPanel>
+		<ItemsControl.ItemContainerStyle>
+			<Style TargetType="ContentPresenter">
+				<Setter Property="Canvas.Left" Value="{Binding mWorldPosition[0]}" />
+				<Setter Property="Canvas.Bottom" Value="{Binding mWorldPosition[2]}" />
+			</Style>
+		</ItemsControl.ItemContainerStyle>
+		<ItemsControl.ItemTemplate>
+			<DataTemplate>
+				<Canvas>
+					<Ellipse>
+						<Ellipse.Style>
+							<Style TargetType="Ellipse" BasedOn="{StaticResource carDot}">
+							</Style>
+						</Ellipse.Style>
+					</Ellipse>
+				</Canvas>
+			</DataTemplate>
+		</ItemsControl.ItemTemplate>
+	</ItemsControl>
+</StackPanel>-->

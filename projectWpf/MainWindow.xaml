@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:projectWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="1080" Width="1920">
     <Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="200" />
+			<ColumnDefinition Width="400" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<Frame x:Name="menu_frame" Grid.Column="0" Background="SandyBrown" />
-		<Frame x:Name="content_frame" Grid.Column="1" Background="Coral" />
+		<Frame x:Name="menu_frame" Grid.Column="0" Background="#13161b" />
+		<Frame x:Name="content_frame" Grid.Column="1" Background="#13161b" />
 	</Grid>
 </Window>

@@ -17,15 +17,15 @@ namespace projectWpf.Sources.pages.streamMem
 {
 	class MemReader : BaseViewModel
 	{
-		private float xMin = 0, xMax = 0, yMin = 0, yMax = 0, zMin = 0, zMax = 0;
-		public float XMin { get { return xMin; } set { xMin = value; NotifyPropertyChanged("XMin"); } }
-		public float XMax { get { return xMax; } set { xMax = value; NotifyPropertyChanged("XMax"); } }
-		public float YMin { get { return yMin; } set { yMin = value; NotifyPropertyChanged("YMin"); } }
-		public float YMax { get { return yMax; } set { yMax = value; NotifyPropertyChanged("YMax"); } }
-		public float ZMin { get { return zMin; } set { zMin = value; NotifyPropertyChanged("ZMin"); } }
-		public float ZMax { get { return zMax; } set { zMax = value; NotifyPropertyChanged("ZMax"); } }
+		//private float xMin = 0, xMax = 0, yMin = 0, yMax = 0, zMin = 0, zMax = 0;
+		//public float XMin { get { return xMin; } set { xMin = value; NotifyPropertyChanged("XMin"); } }
+		//public float XMax { get { return xMax; } set { xMax = value; NotifyPropertyChanged("XMax"); } }
+		//public float YMin { get { return yMin; } set { yMin = value; NotifyPropertyChanged("YMin"); } }
+		//public float YMax { get { return yMax; } set { yMax = value; NotifyPropertyChanged("YMax"); } }
+		//public float ZMin { get { return zMin; } set { zMin = value; NotifyPropertyChanged("ZMin"); } }
+		//public float ZMax { get { return zMax; } set { zMax = value; NotifyPropertyChanged("ZMax"); } }
 
-		private static string _path = Directory.GetCurrentDirectory() + "\\Resources\\lemans_layout2.jpg";
+		private static string _path = Directory.GetCurrentDirectory() + "\\Resources\\lemans_layout3_4.jpg";
 		private ImageSource _BGImage = new BitmapImage(new Uri(_path, UriKind.Absolute));
 
 		public ImageSource BGImage
@@ -63,11 +63,11 @@ namespace projectWpf.Sources.pages.streamMem
 		public MemReader(string fileName)
 		{
 			_fileName = fileName;
-			memBlock = new MemObj(16);
+			memBlock = new MemObj(0);
 		}
 		public bool SetupStreamReading()
 		{
-			Debug.WriteLine(Directory.GetCurrentDirectory());
+			//Debug.WriteLine(Directory.GetCurrentDirectory());
 			try
 			{
 				_mmf = MemoryMappedFile.OpenExisting("$pcars2$");
@@ -78,7 +78,7 @@ namespace projectWpf.Sources.pages.streamMem
 				_stopWatch = new Stopwatch();
 				return true;
 			}
-			catch (Exception err)
+			catch (Exception)
 			{
 				return false;
 			}
@@ -110,20 +110,24 @@ namespace projectWpf.Sources.pages.streamMem
 			memBlock.mParticipantInfo[i].mName = Encoding.ASCII.GetString(_sizeBuffer, start + 1, 64);
 			for (int j = 0; j < 3; j++)
 			{
-				float point = (BitConverter.ToSingle(_sizeBuffer, start + 68 + j * 4) / 10) + (j == 0 ? 100 : 300);
+				float point = 0;
+				if (j == 0)
+					point = (BitConverter.ToSingle(_sizeBuffer, start + 68 + j * 4) + 776) / (float)7.91 + 49;// / 10 * (4 / 3)) + (j == 0 ? 0 : 0
+				else
+					point = (BitConverter.ToSingle(_sizeBuffer, start + 68 + j * 4) + 2902) / (float)8.22 + 23;// / 10 * (4 / 3)) + (j == 0 ? 0 : 0
 				memBlock.mParticipantInfo[i].mWorldPosition[j] = point;
-				if (j == 0 && (XMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || XMin == 0))
-					XMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				if (j == 0 && (XMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || XMax == 0))
-					XMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				if (j == 1 && (YMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || YMin == 0))
-					YMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				if (j == 1 && (YMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || YMax == 0))
-					YMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				if (j == 2 && (ZMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || ZMin == 0))
-					ZMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				if (j == 2 && (ZMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || ZMax == 0))
-					ZMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
+				//if (j == 0 && (XMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || XMin == 0))
+				//	XMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
+				//if (j == 0 && (XMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || XMax == 0))
+				//	XMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
+				//if (j == 1 && (YMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || YMin == 0))
+				//	YMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
+				//if (j == 1 && (YMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || YMax == 0))
+				//	YMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
+				//if (j == 2 && (ZMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || ZMin == 0))
+				//	ZMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
+				//if (j == 2 && (ZMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || ZMax == 0))
+				//	ZMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
 			}
 			memBlock.mParticipantInfo[i].mCurrentLapDistance = (float)BitConverter.ToSingle(_sizeBuffer, start + 80);
 			memBlock.mParticipantInfo[i].mRacePosition = BitConverter.ToUInt32(_sizeBuffer, start + 84);
@@ -149,18 +153,18 @@ namespace projectWpf.Sources.pages.streamMem
 			}
 			for (int i = 0; i < memBlock.mNumParticipants; i++)
 			{
-				memBlock.mParticipantInfo[i].mCurrentSector1Time = BitConverter.ToSingle(_sizeBuffer, 7408 + i * 4);
-				memBlock.mParticipantInfo[i].mCurrentSector2Time = BitConverter.ToSingle(_sizeBuffer, 7664 + i * 4);
-				memBlock.mParticipantInfo[i].mCurrentSector3Time = BitConverter.ToSingle(_sizeBuffer, 7920 + i * 4);
-				memBlock.mParticipantInfo[i].mFastestSector1Time = BitConverter.ToSingle(_sizeBuffer, 8176 + i * 4);
-				memBlock.mParticipantInfo[i].mFastestSector2Time = BitConverter.ToSingle(_sizeBuffer, 8432 + i * 4);
-				memBlock.mParticipantInfo[i].mFastestSector3Time = BitConverter.ToSingle(_sizeBuffer, 8688 + i * 4);
-				memBlock.mParticipantInfo[i].mFastestLapTime = BitConverter.ToSingle(_sizeBuffer, 8944 + i * 4);
-				memBlock.mParticipantInfo[i].mLastLapTime = BitConverter.ToSingle(_sizeBuffer, 9200 + i * 4);
+				memBlock.mParticipantInfo[i].mCurrentSector1Time = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 7408 + i * 4), 3);
+				memBlock.mParticipantInfo[i].mCurrentSector2Time = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 7664 + i * 4), 3);
+				memBlock.mParticipantInfo[i].mCurrentSector3Time = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 7920 + i * 4), 3);
+				memBlock.mParticipantInfo[i].mFastestSector1Time = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 8176 + i * 4), 3);
+				memBlock.mParticipantInfo[i].mFastestSector2Time = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 8432 + i * 4), 3);
+				memBlock.mParticipantInfo[i].mFastestSector3Time = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 8688 + i * 4), 3);
+				memBlock.mParticipantInfo[i].mFastestLapTime = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 8944 + i * 4), 3);
+				memBlock.mParticipantInfo[i].mLastLapTime = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 9200 + i * 4), 3);
 				memBlock.mParticipantInfo[i].mLapInvalidated = BitConverter.ToBoolean(_sizeBuffer, 9456 + i * 4);
 				memBlock.mParticipantInfo[i].mRaceState = BitConverter.ToUInt32(_sizeBuffer, 9520 + i * 4);
 				memBlock.mParticipantInfo[i].mPitMode = BitConverter.ToUInt32(_sizeBuffer, 9776 + i * 4);
-				memBlock.mParticipantInfo[i].mSpeed = BitConverter.ToSingle(_sizeBuffer, 10800 + i * 4);
+				memBlock.mParticipantInfo[i].mSpeed = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 10800 + i * 4) * (float)3.6, 0);
 			}
 			//Debug.WriteLine(BitConverter.ToString(_sizeBuffer, 7398, 20));
 		}
