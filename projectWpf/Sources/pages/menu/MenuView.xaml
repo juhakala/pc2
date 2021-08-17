@@ -6,13 +6,15 @@
       xmlns:local="clr-namespace:projectWpf.Sources.pages.menu"
       xmlns:streamMem="clr-namespace:projectWpf.Sources.pages.streamMem" xmlns:projectWpf="clr-namespace:projectWpf" x:Class="projectWpf.Sources.pages.menu.MenuView"
       mc:Ignorable="d" 
-      d:DesignHeight="400" d:DesignWidth="200"
+      d:DesignHeight="400" d:DesignWidth="400"
       Title="MenuView">
 	<Page.Resources>
 
 		<Style x:Key="carDot" TargetType="Ellipse">
-			<Setter Property="Width" Value="10" />
-			<Setter Property="Height" Value="10" />
+			<Setter Property="Width" Value="12.5" />
+			<Setter Property="Height" Value="12.5" />
+			<Setter Property="Stroke" Value="Black" />
+			<Setter Property="StrokeThickness" Value="1.8" />
 			<Setter Property="Fill" Value="{Binding cColor}" />
 		</Style>
 
@@ -99,8 +101,16 @@
 			<StackPanel Orientation="Horizontal" Width="400">
 				<Button
 					Style="{StaticResource basicButton}"
+					Width="199"
+					Content="Add Team"
+					Command="{Binding AddTeam}"/>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal" Width="400">
+				<Button
+					Style="{StaticResource basicButton}"
 					Width="150"
-					Content="Add Teammate" />
+					Content="Add Teammate"
+					Command="{Binding AddTeammate}"/>
 				<Border
 					BorderBrush="White"
 					BorderThickness="1,1,1,1">
@@ -109,12 +119,13 @@
 						VerticalAlignment="Center"
 						Style="{StaticResource basicTextBlock}"
 						Width="98"
-						Text="{Binding myReader.memBlock.selectedRow}" />
+						Text="{Binding myReader.memBlock.selectedRow.mRacePosition}" />
 				</Border>
 				<Button
 					Style="{StaticResource basicButton}"
 					Width="150"
-					Content="Change Driver" />
+					Content="Change Driver"
+					Command="{Binding ChangeDriver}"/>
 			</StackPanel>
 			<Button Style="{StaticResource basicButton}" Command="{Binding DoSomethingCommand}" Content="Setup and Start Stream"/>
 		</StackPanel>
@@ -167,35 +178,3 @@
 		</DataGrid>
 	</Grid>
 </Page>
-
-
-<!--<StackPanel Grid.Row="0">
-	<ItemsControl ItemsSource="{Binding myReader.memBlock.mParticipantInfo}">
-		<ItemsControl.Background>
-			<ImageBrush ImageSource="{Binding myReader.BGImage}"/>
-		</ItemsControl.Background>
-		<ItemsControl.ItemsPanel>
-			<ItemsPanelTemplate>
-				<Canvas Width="400" Height="706" />
-			</ItemsPanelTemplate>
-		</ItemsControl.ItemsPanel>
-		<ItemsControl.ItemContainerStyle>
-			<Style TargetType="ContentPresenter">
-				<Setter Property="Canvas.Left" Value="{Binding mWorldPosition[0]}" />
-				<Setter Property="Canvas.Bottom" Value="{Binding mWorldPosition[2]}" />
-			</Style>
-		</ItemsControl.ItemContainerStyle>
-		<ItemsControl.ItemTemplate>
-			<DataTemplate>
-				<Canvas>
-					<Ellipse>
-						<Ellipse.Style>
-							<Style TargetType="Ellipse" BasedOn="{StaticResource carDot}">
-							</Style>
-						</Ellipse.Style>
-					</Ellipse>
-				</Canvas>
-			</DataTemplate>
-		</ItemsControl.ItemTemplate>
-	</ItemsControl>
-</StackPanel>-->

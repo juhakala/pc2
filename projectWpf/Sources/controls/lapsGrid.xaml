@@ -1,27 +1,17 @@
-﻿<UserControl x:Class="projectWpf.Sources.controls.mainDataGrid"
+﻿<UserControl x:Class="projectWpf.Sources.controls.lapsGrid"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:projectWpf.Sources.controls"
-             xmlns:smem="clr-namespace:projectWpf.Sources.pages.streamMem"
              xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
 			 xmlns:converters="clr-namespace:projectWpf.Sources.converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-	
-		<converters:floatToMinSecMilliConverter x:Key="floatToTimeConverter" />
 
-		<CollectionViewSource x:Key="mParticipantInfo" Source="{Binding myReader.memBlock.mParticipantInfo}" IsLiveSortingRequested="True">
-			<CollectionViewSource.SortDescriptions>
-				<componentmodel:SortDescription PropertyName="mRacePosition"/>
-			</CollectionViewSource.SortDescriptions>
-			<CollectionViewSource.LiveSortingProperties>
-				<s:String>mRacePosition</s:String>
-			</CollectionViewSource.LiveSortingProperties>
-		</CollectionViewSource>
+		<converters:floatToMinSecMilliConverter x:Key="floatToTimeConverter" />
 
 		<SolidColorBrush x:Key="basicBackground" Color="#13161b" />
 		<SolidColorBrush x:Key="basicCellBackground" Color="#353d4b" />
@@ -38,35 +28,22 @@
 		</Style>
 
 	</UserControl.Resources>
-    <Grid>
+	<Grid>
 		<DataGrid
-			HorizontalAlignment="Left"
+            HorizontalAlignment="Right"
 			Width="auto"
             CanUserAddRows="False"
             HeadersVisibility="Column"
             AutoGenerateColumns="False"
 			GridLinesVisibility="None"
 			BorderBrush="Black"
-            Background="{StaticResource basicBackground}"
-            ItemsSource="{Binding Source={StaticResource mParticipantInfo}}"
+			Background="{StaticResource basicBackground}"
+            ItemsSource="{Binding myReader.memBlock.cTeams[0].cTeam.Laps}"
 			ColumnHeaderStyle="{StaticResource basicDataGridColumnHeader}"
-			
-			SelectedItem="{Binding myReader.memBlock.selectedRow, Mode=OneWayToSource}"
-			>
-			<!--SelectedIndex="{Binding myReader.memBlock.selectedRow, Mode=OneWayToSource}"-->
+        >
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="  #  " Binding="{Binding mRacePosition}"/>
-				<DataGridTextColumn Header=" Name " Binding="{Binding mName}" />
-				<DataGridTextColumn Header=" Lap " Binding="{Binding mCurrentLap}" />
-				<DataGridTextColumn Width="100" Header=" Best " Binding="{Binding mFastestLapTime, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Last " Binding="{Binding mLastLapTime, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Sec1 " Binding="{Binding mCurrentSector1Time, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Sec2 " Binding="{Binding mCurrentSector2Time, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Sec3 " Binding="{Binding mCurrentSector3Time, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Speed " Binding="{Binding mSpeed}" />
-				<DataGridTextColumn Header=" Color " Binding="{Binding cColor}" />
-				<DataGridTextColumn Header=" Class  " Binding="{Binding mCarClass}" />
-
+				<DataGridTextColumn Header="  #  " Binding="{Binding number}" />
+				<DataGridTextColumn Header=" Time " Binding="{Binding time, Converter={StaticResource floatToTimeConverter}}" />
 
 			</DataGrid.Columns>
 			<DataGrid.CellStyle>
@@ -81,7 +58,6 @@
 					<Setter Property="Margin" Value="0,0,0,0" />
 				</Style>
 			</DataGrid.CellStyle>
-
-		</DataGrid>
+        </DataGrid>
     </Grid>
 </UserControl>

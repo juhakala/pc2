@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace projectWpf.Sources.pages
 {
@@ -38,6 +40,7 @@ namespace projectWpf.Sources.pages
 		uint _mRaceState;
 		uint _mPitMode;
 		float _mSpeed;
+		string _mCarClass;
 
 		private string _cColor;
 		private CTeam _cTeam;
@@ -60,6 +63,7 @@ namespace projectWpf.Sources.pages
 				if (_mName != value)
 				{
 					_mName = value;
+					cTeam = new CTeam(mName);
 					NotifyPropertyChanged("mName");
 				}
 			}
@@ -111,6 +115,17 @@ namespace projectWpf.Sources.pages
 				{
 					_mCurrentLap = value;
 					NotifyPropertyChanged("mCurrentLap");
+					if (value > 1)
+					{
+						float tmp = mCurrentSector1Time;
+						Task.Delay(1000).ContinueWith(t => { 
+							
+							App.Current.Dispatcher.Invoke((Action)delegate
+							{
+								cTeam.AddLap(mLastLapTime, tmp, mCurrentSector2Time, mCurrentSector3Time);
+							});
+						});
+					}
 				}
 			}
 		}
@@ -231,6 +246,11 @@ namespace projectWpf.Sources.pages
 			{
 				if (_mRaceState != value)
 				{
+					if (value == 2)
+					{
+						cTeam.ChangeDriver();
+						cTeam.startElapsedTimerNotices();
+					}
 					_mRaceState = value;
 					NotifyPropertyChanged("mRaceState");
 				}
@@ -244,6 +264,10 @@ namespace projectWpf.Sources.pages
 				if (_mPitMode != value)
 				{
 					_mPitMode = value;
+					if (value == 3)
+					{
+						cTeam.ChangeDriver();
+					}
 					NotifyPropertyChanged("mPitMode");
 				}
 			}
@@ -254,6 +278,23 @@ namespace projectWpf.Sources.pages
 			{
 				_mSpeed = value;
 				NotifyPropertyChanged("mSpeed");
+			}
+		}
+
+		public string mCarClass
+		{
+			get { return _mCarClass; }
+			set
+			{
+				if (_mCarClass != value)
+				{
+					_mCarClass = value;
+					if (value == "GTE")
+						cColor = "Green";
+					else if (value == "LMP2")
+						cColor = "Blue";
+					NotifyPropertyChanged("mCarClass");
+				}
 			}
 		}
 		public string cColor {
@@ -286,7 +327,6 @@ namespace projectWpf.Sources.pages
 			mWorldPosition.Add(0);
 			mRacePosition = i;
 			cColor = "Red";
-			cTeam = new CTeam();
 		}
 	}
 	class MemObj : BaseViewModel
@@ -304,7 +344,7 @@ namespace projectWpf.Sources.pages
 		private int _mNumParticipants;
 		private ObservableCollection<ParticipantInfo> _mParticipantInfo;
 
-		private int _selectedRow;
+		private ParticipantInfo _selectedRow;
 
 		public uint mVersion { get { return _mVersion; } set { _mVersion = value; NotifyPropertyChanged("mVersion"); } }
 		public uint mBuilderVersionNumber { get { return _mBuilderVersionNumber; } set { _mBuilderVersionNumber = value; NotifyPropertyChanged("mBuilderVersionNumber"); } }
@@ -321,18 +361,11 @@ namespace projectWpf.Sources.pages
 			{
 				if (_mNumParticipants != value)
 				{
-					for (int i = mNumParticipants; value > i; i++)
+					for (int i = mParticipantInfo.Count; value > i; i++)
 					{
 						App.Current.Dispatcher.Invoke((Action)delegate
 						{
 							mParticipantInfo.Add(new ParticipantInfo((uint)i + 1));
-						});
-					}
-					for (int i = mNumParticipants; value < i; i++)
-					{
-						App.Current.Dispatcher.Invoke((Action)delegate
-						{
-							mParticipantInfo.RemoveAt(mParticipantInfo.Count - 1);
 						});
 					}
 					_mNumParticipants = value; NotifyPropertyChanged("mNumParticipants");
@@ -340,7 +373,7 @@ namespace projectWpf.Sources.pages
 			}
 		}
 		public ObservableCollection<ParticipantInfo> mParticipantInfo { get { return _mParticipantInfo; } set { _mParticipantInfo = value; /*NotifyPropertyChanged("mParticipantInfo");*/  /*Debug.WriteLine($"patrinfo CHANGED");*/ } }
-		public int selectedRow {
+		public ParticipantInfo selectedRow {
 			get { return _selectedRow; }
 			set
 			{
@@ -348,13 +381,74 @@ namespace projectWpf.Sources.pages
 				{
 					_selectedRow = value;
 					NotifyPropertyChanged("selectedRow");
+					Log($"Row {_selectedRow.mRacePosition} selected");
 				}
+			}
+		}
+		private int _selectedTeam;
+		public int selectedTeam
+		{
+			get { return _selectedTeam; }
+			set
+			{
+				_selectedTeam = value;
+				//Debug.WriteLine(_selectedTeam);
+				for (int i = 0; i < cTeams.Count; i++)
+				{
+					if (useChildIndex && i == childIndex)
+					{
+						useChildIndex = false;
+						continue;
+					}
+					cTeams[i].cTeam.selectedDriver = -1;
+				}
+				NotifyPropertyChanged("selectedTeam");
+			}
+		}
+		private bool useChildIndex;
+		private int childIndex;
+
+		public void keepChildSelected(int index)
+		{
+			childIndex = index;
+			useChildIndex = true;
+		}
+		private ObservableCollection<ParticipantInfo> _cTeams;
+		public ObservableCollection<ParticipantInfo> cTeams {
+			get { return _cTeams; }
+			set
+			{
+				_cTeams = value;
+			}
+		}
+		public void TeamToList()
+		{
+			if (selectedRow != null)
+			{
+				selectedRow.cTeam.GiveParentViewModel(this, cTeams.Count);
+				cTeams.Add(selectedRow);
+				selectedTeam = cTeams.Count - 1;
+			}
+		}
+		public void AddDriver()
+		{
+			if (selectedTeam > -1)
+			{
+				cTeams[selectedTeam].cTeam.AddDriver(cTeams[selectedTeam].cTeam.drivers[0].name == "Comp" ? "0" : cTeams[selectedTeam].cTeam.drivers.Count.ToString() ); //placeholder for drivername
+			}
+		}
+		public void ChangeDriver()
+		{
+			if (selectedTeam > -1)
+			{
+				cTeams[selectedTeam].cTeam.SetNextDriver();
 			}
 		}
 		public MemObj(int nParticipants = 0)
 		{
 			mParticipantInfo = new ObservableCollection<ParticipantInfo>();
 			mNumParticipants = nParticipants;
+			cTeams = new ObservableCollection<ParticipantInfo>();
 		}
 	}
 }

@@ -12,39 +12,29 @@
       Title="StreamMemView"
 	  xmlns:s="clr-namespace:System;assembly=mscorlib">
 	<Page.Resources>
-		<!--<CollectionViewSource x:Key="mParticipantInfo" Source="{Binding myReader.memBlock.mParticipantInfo}" IsLiveSortingRequested="True">
-			<CollectionViewSource.SortDescriptions>
-				<componentmodel:SortDescription PropertyName="mRacePosition"/>
-			</CollectionViewSource.SortDescriptions>
-			<CollectionViewSource.LiveSortingProperties>
-				<s:String>mRacePosition</s:String>
-			</CollectionViewSource.LiveSortingProperties>
-		</CollectionViewSource>-->
 	</Page.Resources>
-	<ScrollViewer>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto" />
+			<ColumnDefinition Width="auto" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<controls:mainDataGrid />
+		<controls:teamsGrid Grid.Row="1" VerticalAlignment="Bottom" />
+		<controls:lapsGrid Grid.Column="1" HorizontalAlignment="Right" />
+	</Grid>
+	<!--<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 		<StackPanel>
-			<!--<StackPanel Orientation="Horizontal">
-				<StackPanel>
-					<TextBlock Text="x, y, z" />
-					<TextBlock Text="{Binding myReader.memBlock.mParticipantInfo[0].mWorldPosition[0]}" />
-					<TextBlock Text="{Binding myReader.memBlock.mParticipantInfo[0].mWorldPosition[1]}" />
-					<TextBlock Text="{Binding myReader.memBlock.mParticipantInfo[0].mWorldPosition[2]}" />
-				</StackPanel>
-			</StackPanel>-->
-			<!--<StackPanel Orientation="Horizontal">
-				<StackPanel>
-					<TextBlock Text="x/y min/max" />
-					<TextBlock Text="{Binding myReader.XMin}" />
-					<TextBlock Text="{Binding myReader.XMax}" />
-					<TextBlock Text="{Binding myReader.YMin}" />
-					<TextBlock Text="{Binding myReader.YMax}" />
-					<TextBlock Text="{Binding myReader.ZMin}" />
-					<TextBlock Text="{Binding myReader.ZMax}" />
-				</StackPanel>
-			</StackPanel>-->
-			<!--<DataGrid
-				ItemsSource="{Binding Source={StaticResource mParticipantInfo}}" />-->
-			<controls:mainDataGrid />
+			<StackPanel>
+				<controls:mainDataGrid />
+			</StackPanel>
+			<StackPanel
+				VerticalAlignment="Bottom">
+				<controls:teamsGrid />
+			</StackPanel>
 		</StackPanel>
-	</ScrollViewer>
+	</ScrollViewer>-->
 </Page>

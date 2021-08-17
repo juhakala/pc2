@@ -24,6 +24,8 @@ namespace projectWpf.Sources.pages
 		}
 		public void Log(string message)
 		{
+			if (_logEvents.Count > 0)
+				_logEvents.RemoveAt(0);
 			_logEvents.Add(new LogEvent(message));
 		}
 		protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

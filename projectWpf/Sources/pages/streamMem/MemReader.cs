@@ -107,27 +107,16 @@ namespace projectWpf.Sources.pages.streamMem
 		private void readToParticipantInfo(int i, int start)
 		{			
 			memBlock.mParticipantInfo[i].mIsActive = BitConverter.ToBoolean(_sizeBuffer, start);
-			memBlock.mParticipantInfo[i].mName = Encoding.ASCII.GetString(_sizeBuffer, start + 1, 64);
+			string tmp = Encoding.ASCII.GetString(_sizeBuffer, start + 1, 64);
+			memBlock.mParticipantInfo[i].mName = tmp.Substring(0, tmp.IndexOf('\0'));
 			for (int j = 0; j < 3; j++)
 			{
 				float point = 0;
 				if (j == 0)
-					point = (BitConverter.ToSingle(_sizeBuffer, start + 68 + j * 4) + 776) / (float)7.91 + 49;// / 10 * (4 / 3)) + (j == 0 ? 0 : 0
+					point = (BitConverter.ToSingle(_sizeBuffer, start + 68 + j * 4) + 776) / (float)7.91 + 49;
 				else
-					point = (BitConverter.ToSingle(_sizeBuffer, start + 68 + j * 4) + 2902) / (float)8.22 + 23;// / 10 * (4 / 3)) + (j == 0 ? 0 : 0
+					point = (BitConverter.ToSingle(_sizeBuffer, start + 68 + j * 4) + 2902) / (float)8.22 + 23;
 				memBlock.mParticipantInfo[i].mWorldPosition[j] = point;
-				//if (j == 0 && (XMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || XMin == 0))
-				//	XMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				//if (j == 0 && (XMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || XMax == 0))
-				//	XMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				//if (j == 1 && (YMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || YMin == 0))
-				//	YMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				//if (j == 1 && (YMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || YMax == 0))
-				//	YMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				//if (j == 2 && (ZMin > memBlock.mParticipantInfo[i].mWorldPosition[j] || ZMin == 0))
-				//	ZMin = memBlock.mParticipantInfo[i].mWorldPosition[j];
-				//if (j == 2 && (ZMax < memBlock.mParticipantInfo[i].mWorldPosition[j] || ZMax == 0))
-				//	ZMax = memBlock.mParticipantInfo[i].mWorldPosition[j];
 			}
 			memBlock.mParticipantInfo[i].mCurrentLapDistance = (float)BitConverter.ToSingle(_sizeBuffer, start + 80);
 			memBlock.mParticipantInfo[i].mRacePosition = BitConverter.ToUInt32(_sizeBuffer, start + 84);
@@ -165,6 +154,10 @@ namespace projectWpf.Sources.pages.streamMem
 				memBlock.mParticipantInfo[i].mRaceState = BitConverter.ToUInt32(_sizeBuffer, 9520 + i * 4);
 				memBlock.mParticipantInfo[i].mPitMode = BitConverter.ToUInt32(_sizeBuffer, 9776 + i * 4);
 				memBlock.mParticipantInfo[i].mSpeed = (float)Math.Round(BitConverter.ToSingle(_sizeBuffer, 10800 + i * 4) * (float)3.6, 0);
+				string tmp = Encoding.Default.GetString(_sizeBuffer, 15152 + i * 64, 64);
+				//memBlock.mParticipantInfo[i].mCarClass = Encoding.Default.GetString(_sizeBuffer, 15152 + i * 64, 64);
+				memBlock.mParticipantInfo[i].mCarClass = tmp.Substring(0, tmp.IndexOf('\0'));
+				//Debug.WriteLine(BitConverter.ToString(_sizeBuffer, 11056 + 4096 + i * 64, 64));
 			}
 			//Debug.WriteLine(BitConverter.ToString(_sizeBuffer, 7398, 20));
 		}
