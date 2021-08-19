@@ -134,6 +134,17 @@ namespace projectWpf.Sources.pages
 				NotifyPropertyChanged("name");
 			}
 		}
+		private bool _active;
+		public bool active
+		{
+			get { return _active; }
+			set
+			{
+				_active = value;
+				Debug.WriteLine($"{index} active");
+				NotifyPropertyChanged("active");
+			}
+		}
 		public int selectedDriver {
 			get { return _selectedDriver; }
 			set
@@ -155,6 +166,7 @@ namespace projectWpf.Sources.pages
 			AddDriver(dri);
 			curDriver = 0;
 			nextDriver = 0;
+			active = false;
 		}
 		public void AddDriver(string name)
 		{
@@ -166,14 +178,6 @@ namespace projectWpf.Sources.pages
 		public void AddLap(float time, float sec1, float sec2, float sec3)
 		{
 			Laps.Add(new CLap(curDriver, time, new float[] { sec1, sec2, sec3 }, Laps.Count + 1));
-			Debug.WriteLine("lap added");
-			Debug.WriteLine(Laps[0]);
-			Debug.WriteLine(time);
-			Debug.WriteLine(sec1);
-			Debug.WriteLine(sec2);
-			Debug.WriteLine(sec3);
-
-
 		}
 		public void SetNextDriver()
 		{

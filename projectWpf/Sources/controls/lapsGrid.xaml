@@ -12,6 +12,8 @@
 	<UserControl.Resources>
 
 		<converters:floatToMinSecMilliConverter x:Key="floatToTimeConverter" />
+		<converters:BoolToVisibilityConverter x:Key="BoolToVisibConverter" />
+
 
 		<SolidColorBrush x:Key="basicBackground" Color="#13161b" />
 		<SolidColorBrush x:Key="basicCellBackground" Color="#353d4b" />
@@ -27,37 +29,60 @@
 			<Setter Property="Margin" Value="0,0,0,0" />
 		</Style>
 
-	</UserControl.Resources>
-	<Grid>
-		<DataGrid
-            HorizontalAlignment="Right"
-			Width="auto"
-            CanUserAddRows="False"
-            HeadersVisibility="Column"
-            AutoGenerateColumns="False"
-			GridLinesVisibility="None"
-			BorderBrush="Black"
-			Background="{StaticResource basicBackground}"
-            ItemsSource="{Binding myReader.memBlock.cTeams[0].cTeam.Laps}"
-			ColumnHeaderStyle="{StaticResource basicDataGridColumnHeader}"
-        >
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="  #  " Binding="{Binding number}" />
-				<DataGridTextColumn Header=" Time " Binding="{Binding time, Converter={StaticResource floatToTimeConverter}}" />
+		<Style x:Key="basicElementStyle" TargetType="TextBlock">
+			<Setter Property="TextAlignment" Value="Right" />
+			<Setter Property="Padding" Value="0,0,4,0" />
+		</Style>
 
-			</DataGrid.Columns>
-			<DataGrid.CellStyle>
-				<Style TargetType="DataGridCell">
-					<Setter Property="Background" Value="{StaticResource basicCellBackground}" />
-					<Setter Property="BorderBrush" Value="#13161b" />
-					<Setter Property="BorderThickness" Value="1,1,1,1" />
-					<Setter Property="Height" Value="24" />
-					<Setter Property="FontSize" Value="15" />
-					<Setter Property="Foreground" Value="White" />
-					<Setter Property="FontFamily" Value="Verdana" />
-					<Setter Property="Margin" Value="0,0,0,0" />
-				</Style>
-			</DataGrid.CellStyle>
-        </DataGrid>
-    </Grid>
+		<Style x:Key="basicElementStyle2" TargetType="TextBlock">
+			<Setter Property="Padding" Value="4,0,0,0" />
+		</Style>
+
+	</UserControl.Resources>
+	<Grid
+		Margin="100,0,0,0"
+		>
+		<ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="True" MaxHeight="790">
+			<ItemsControl ItemsSource="{Binding myReader.memBlock.cTeams}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<DataGrid
+							HorizontalAlignment="Right"
+							Width="auto"
+							CanUserAddRows="False"
+							HeadersVisibility="Column"
+							AutoGenerateColumns="False"
+							GridLinesVisibility="None"
+							BorderBrush="Black"
+							Background="{StaticResource basicBackground}"
+							ItemsSource="{Binding cTeam.Laps}"
+							ColumnHeaderStyle="{StaticResource basicDataGridColumnHeader}"
+							Visibility="{Binding cTeam.active, Converter={StaticResource BoolToVisibConverter}}"
+							>
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="  #  " Binding="{Binding number}" ElementStyle="{StaticResource basicElementStyle2}"/>
+								<DataGridTextColumn Header=" Time " Binding="{Binding time, Converter={StaticResource floatToTimeConverter}}" ElementStyle="{StaticResource basicElementStyle}"/>
+								<DataGridTextColumn Header=" Driver " Binding="{Binding driver}" ElementStyle="{StaticResource basicElementStyle}" />
+
+							</DataGrid.Columns>
+							<DataGrid.CellStyle>
+								<Style TargetType="DataGridCell">
+									<Setter Property="Background" Value="{StaticResource basicCellBackground}" />
+									<Setter Property="BorderBrush" Value="#13161b" />
+									<Setter Property="BorderThickness" Value="1,1,1,1" />
+									<Setter Property="Height" Value="24" />
+									<Setter Property="FontSize" Value="15" />
+									<Setter Property="Foreground" Value="White" />
+									<Setter Property="FontFamily" Value="Verdana" />
+									<Setter Property="Margin" Value="0,0,0,0" />
+									
+									<Setter Property="HorizontalContentAlignment" Value="Right" />
+								</Style>
+							</DataGrid.CellStyle>
+						</DataGrid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+	</Grid>
 </UserControl>

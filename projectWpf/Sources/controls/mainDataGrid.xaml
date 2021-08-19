@@ -37,6 +37,19 @@
 			<Setter Property="Margin" Value="0,0,0,0" />
 		</Style>
 
+		<Style x:Key="basicElementStyle" TargetType="TextBlock">
+			<Setter Property="TextAlignment" Value="Right" />
+			<Setter Property="Padding" Value="0,0,4,0" />
+		</Style>
+
+		<Style x:Key="basicElementStyle2" TargetType="TextBlock">
+			<Setter Property="Padding" Value="4,0,0,0" />
+		</Style>
+
+		<!--<Style x:Key="secondElementStyle" TargetType="TextBlock" BasedOn="{StaticResource basicElementStyle}">
+			<Setter Property="Padding" Value="0,0,10,0" />
+		</Style>-->
+
 	</UserControl.Resources>
     <Grid>
 		<DataGrid
@@ -55,18 +68,17 @@
 			>
 			<!--SelectedIndex="{Binding myReader.memBlock.selectedRow, Mode=OneWayToSource}"-->
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="  #  " Binding="{Binding mRacePosition}"/>
+				<DataGridTextColumn Header="  #  " Binding="{Binding mRacePosition}" ElementStyle="{StaticResource basicElementStyle2}"/>
 				<DataGridTextColumn Header=" Name " Binding="{Binding mName}" />
-				<DataGridTextColumn Header=" Lap " Binding="{Binding mCurrentLap}" />
-				<DataGridTextColumn Width="100" Header=" Best " Binding="{Binding mFastestLapTime, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Last " Binding="{Binding mLastLapTime, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Sec1 " Binding="{Binding mCurrentSector1Time, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Sec2 " Binding="{Binding mCurrentSector2Time, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Sec3 " Binding="{Binding mCurrentSector3Time, Converter={StaticResource floatToTimeConverter}}" />
-				<DataGridTextColumn Width="100" Header=" Speed " Binding="{Binding mSpeed}" />
-				<DataGridTextColumn Header=" Color " Binding="{Binding cColor}" />
+				<DataGridTextColumn Header=" Lap " Binding="{Binding mCurrentLap}" ElementStyle="{StaticResource basicElementStyle}"/>
+				<DataGridTextColumn Width="100" Header=" Best " Binding="{Binding mFastestLapTime, Converter={StaticResource floatToTimeConverter}}" ElementStyle="{StaticResource basicElementStyle}"/>
+				<DataGridTextColumn Width="100" Header=" Last " Binding="{Binding mLastLapTime, Converter={StaticResource floatToTimeConverter}}" ElementStyle="{StaticResource basicElementStyle}"/>
+				<DataGridTextColumn Width="100" Header=" Sec1 " Binding="{Binding mCurrentSector1Time, Converter={StaticResource floatToTimeConverter}}" ElementStyle="{StaticResource basicElementStyle}"/>
+				<DataGridTextColumn Width="100" Header=" Sec2 " Binding="{Binding mCurrentSector2Time, Converter={StaticResource floatToTimeConverter}}" ElementStyle="{StaticResource basicElementStyle}"/>
+				<DataGridTextColumn Width="100" Header=" Sec3 " Binding="{Binding mCurrentSector3Time, Converter={StaticResource floatToTimeConverter}}" ElementStyle="{StaticResource basicElementStyle}" />
+				<DataGridTextColumn Width="100" Header=" Speed " Binding="{Binding mSpeed}" ElementStyle="{StaticResource basicElementStyle}" />
+				<DataGridTextColumn Header=" Color " Binding="{Binding cColor}" ElementStyle="{StaticResource basicElementStyle}"/>
 				<DataGridTextColumn Header=" Class  " Binding="{Binding mCarClass}" />
-
 
 			</DataGrid.Columns>
 			<DataGrid.CellStyle>

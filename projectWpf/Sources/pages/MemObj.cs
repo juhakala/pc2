@@ -391,7 +391,10 @@ namespace projectWpf.Sources.pages
 			get { return _selectedTeam; }
 			set
 			{
+				cTeams[_selectedTeam].cTeam.active = false;
 				_selectedTeam = value;
+				cTeams[_selectedTeam].cTeam.active = true;
+
 				//Debug.WriteLine(_selectedTeam);
 				for (int i = 0; i < cTeams.Count; i++)
 				{
